@@ -3,6 +3,17 @@ var express = require('express'),
     app = express(),
     bodyParser = require('body-parser');
 
+
+function FindIndexById(id){
+  var i=0;
+  while( i< todos.length){
+     if(todos[i]._id === id ){
+     break;
+     }
+     i++;
+  }
+  return i;
+}
 // configure bodyParser (for receiving form data)
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -87,14 +98,7 @@ app.get('/api/todos/:id', function show(req, res) {
    * id specified in the route parameter (:id)
    */
   var find = +req.params.id;
-   var i=0;
-
-   while( i< todos.length){
-      if(todos[i]._id === find ){
-      break;
-      }
-      i++;
-   }
+   var i = FindIndexById(find);
    res.json(todos[i]);
 });
 
@@ -103,22 +107,13 @@ app.put('/api/todos/:id', function update(req, res) {
    * id specified in the route parameter (:id) and respond
    * with the newly updated todo.
    */
-   console.log(req.params)
-   var find = +req.params.id;
-    var i=0;
-
-    while( i < todos.length){
-       if(todos[i]._id === find ){
-         break;
-       }
-       i++;
-    }
-    
+    console.log(req.params)
+    var find = +req.params.id;
+    var i = FindIndexById(find);
     todos[i].task =  req.body.task ;
     todos[i].description =req.body.description;
-console.log(todos[i])
 
-  res.json(todos[i]);
+    res.json(todos[i]);
 
 
 });
@@ -128,14 +123,9 @@ app.delete('/api/todos/:id', function destroy(req, res) {
    * id specified in the route parameter (:id) and respond
    * with success.
    */
-   var i=0;
+
    var find= +req.params.id;
-   while( i < todos.length){
-     if(todos[i]._id ==find){
-       break;
-     }
-     i++;
-   }
+   var i = FindIndexById(find);
 
    res.json(todos.splice(i,1));
 });
